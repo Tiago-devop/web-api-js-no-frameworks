@@ -38,6 +38,3 @@ const heroRepository = new HeroRepository({
 //   .find(1)
 //   .then(console.log)
 //   .catch((error) => console.log("error", error));
-
-git config --global user.email "you@example.com"
-git config --global user.name "Your Name"
