@@ -1,8 +1,10 @@
 const http = require('http')
 const PORT = 3000
 const DEFAULT_HEADER = { 'Content-Type': 'application/json' }
+
 const HeroFactory = require('./factories/heroFactory')
 const heroService = HeroFactory.generateInstance()
+const Hero = require('./entities/hero')
 
 const routes = {
     '/heroes:get': async (request, response) => {
@@ -11,6 +13,19 @@ const routes = {
         response.write(JSON.stringify({ results: heroes }))
         
         return response.end()
+    },
+    '/heroes:post': async (request, response) => {
+        // async iterator
+        for await ( const data of request) {
+            const item = JSON.parse(data)
+            const hero = new Hero(item)
+            const { error, valid } = hero.isValid()
+            if (!valid) {
+                response.writeHead(400, DEFAULT_HEADER)
+                response.write(JSON.stringify({ error: error.join(',') }))
+                return response.end()
+            }
+        }
     },
 
     default: (request, response) => {
