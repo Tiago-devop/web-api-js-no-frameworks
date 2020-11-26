@@ -25,6 +25,15 @@ const routes = {
                 response.write(JSON.stringify({ error: error.join(',') }))
                 return response.end()
             }
+
+            const id = await heroService.create(hero)
+            response.writeHead(201, DEFAULT_HEADER)
+            response.write(JSON.stringify({ success: 'User Created with success!!', id }))
+
+            // só jogamos o return aqui pois sabemos que é um objeto body por
+            // requisição se fosse um aquivo, que sobe sobre demanda
+            // ele poderia entrar mais vezes em um mesmo evento, ai removeríamos o return
+            return response.end()
         }
     },
 
